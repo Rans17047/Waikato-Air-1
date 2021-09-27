@@ -21,7 +21,7 @@ def delay_print(string):
 
 
 # Here the function is being used to print the program title.
-delay_print("Waikato Air Email Text Generator\n\n".title())
+delay_print("Waikato Air Email Generator\n\n".title())
 
 
 # These classes are used to customize the inquirer inputs
@@ -133,6 +133,12 @@ def Original_Price():
         prompt_suffix=": $",
         type=int)
 
+    if original_price < 0:
+        delay_print(Colour.RED +
+                    "\nSorry, please enter positive numbers only\n" +
+                    Colour.END)
+        Original_Price()
+
 
 def Cabin_Class():
     global class_type
@@ -193,20 +199,23 @@ def Cabin_Class():
             sys.exit()
 
 
-def Discount():
-    global discounted_price
+def Discount_Input():
     global discount
+    global discounted_price
 
     discount = click.prompt("\nPlease enter the discount percentage",
                             prompt_suffix=': %',
                             type=int)
+
     discounted_price = discounted_fare - (discounted_fare * discount / 100)
 
     if discounted_price < 0:
         delay_print(Colour.RED + "\nThe number you entered is too high!,"
                     " please enter a lower discount.\n" + Colour.END)
-        Discount()
+        Discount_Input()
 
+
+def Discount():
     delay_print(Colour.BOLD +
                 "\nThe discounted price to {} in {} is ${:.2f}".format(
                     destination['destination'], class_type['class'],
@@ -242,12 +251,17 @@ def Seats():
                 Colour.END)
 
 
-def Email():
-    global customer_name  # These are global variables because I wanted
-    global events  # to use them in formatting the email text
-    customer_name = click.prompt("\nPlease enter the customers first name",
-                                 type=str)
+def User_Name():
+    global customer_name  # For formatting the email text
+    customer_name = click.prompt("\nPlease enter the customers first name")
 
+    if not customer_name.isalpha():
+        delay_print(Colour.RED + "\nPlease input letters only\n" + Colour.END)
+        User_Name()
+
+
+def Email():
+    global events
     print("\n==============================================================\n"
           "##############################################################\n"
           "==============================================================")
@@ -353,8 +367,10 @@ def Restart():
 def functions():
     Destinations()
     Flight_Confirmation()
+    Discount_Input()
     Discount()
     delay_print("\nThe current seating capacity is {}\n".format(seats))
+    User_Name()
     Email()
     x = [Text_1, Text_2, Text_3]  # This bit of code picks a random function
     random.choice(x)()  # containing the email that will be printed
