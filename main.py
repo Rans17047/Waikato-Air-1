@@ -3,8 +3,6 @@ import time  # For delay
 import click  # For inputs
 import random  # To pick a random function
 import inquirer  # For inputs
-# For infinite cycling through a list
-from itertools import cycle, islice
 # To customize inquirer inputs
 from inquirer.render.console import ConsoleRender
 from inquirer.render.console._list import List
@@ -25,6 +23,8 @@ delay_print("Waikato Air Email Generator\n\n".title())
 
 
 # These classes are used to customize the inquirer inputs
+# I decided to create a custom inquirer theme because the two
+# default themes weren't that great
 class ColorList(List):
     def get_options(self):
         choices = self.question.choices
@@ -41,7 +41,7 @@ class ColorList(List):
             yield choice, symbol, color
 
 
-#This subclass will be instantiated in prompt()
+# This subclass will be instantiated in prompt()
 class ListConsoleRender(ConsoleRender):
     def render_factory(self, question):
         if question != 'list':
@@ -237,6 +237,7 @@ def Discount():
 
         if confirm is True:
             Remove_Discount_Lines()
+            Discount_Input()
             Discount()
         else:
             delay_print("Ok, see you next time!\n")
@@ -309,8 +310,8 @@ def Text_2():
 def Text_3():
     delay_print(
         "\n\nText:\n" + "Hi {},\n\n".format(customer_name.title()) +
-        "Thanks for choosing waikato air, we are"
-        " currently having a {}% off sale on all {}\n"
+        "Thanks for choosing waikato air, we are "
+        "currently having a {}% off sale on all {}\n"
         "flights to {}. Book now! There are only {} seats left!\n\n".format(
             discount, class_type['class'], destination['destination'], seats))
 
@@ -346,6 +347,7 @@ def Restart():
         delay_print("\nThe current seating capacity is {}\n".format(seats))
         discounted_price += 0.4
         delay_print("\nThe current fare is {:.2f}\n".format(discounted_price))
+        User_Name()
         Email()
         x = [Text_1, Text_2, Text_3]
         random.choice(x)()
@@ -369,7 +371,9 @@ def functions():
     Flight_Confirmation()
     Discount_Input()
     Discount()
-    delay_print("\nThe current seating capacity is {}\n".format(seats))
+    delay_print(Colour.BOLD +
+                "\nThe current seating capacity is {}\n".format(seats) +
+                Colour.END)
     User_Name()
     Email()
     x = [Text_1, Text_2, Text_3]  # This bit of code picks a random function
