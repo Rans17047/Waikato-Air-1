@@ -360,7 +360,7 @@ def Restart():
     elif option['option'] == "Exit program":
         print(
             "==============================================================\n")
-        delay_print("Thanks for using the waikato air email text generator")
+        delay_print("Thanks for using the waikato air email generator")
         delay_print("\nSee you next time!\n")
         sys.exit()
 
