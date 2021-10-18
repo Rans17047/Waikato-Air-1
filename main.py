@@ -81,7 +81,13 @@ def Remove_Discount_Lines(n=8):
         sys.stdout.write(erase_line)
 
 
-def Remove_Lines(n=57):
+def Remove_Lines(n=106):
+    for _ in range(n):
+        sys.stdout.write(cursor_up_one)
+        sys.stdout.write(erase_line)
+
+
+def Remove(n=17):
     for _ in range(n):
         sys.stdout.write(cursor_up_one)
         sys.stdout.write(erase_line)
@@ -119,19 +125,40 @@ def Flight_Confirmation():
     elif flight_confirmation is False:
         delay_print(
             Colour.RED +
-            "\nSorry, this program is only for users flying the next day.\n" +
-            Colour.END)
-        sys.exit()
-    # Otherwise I would have to use lists
+            "\nSorry, this program is only for users flying the next day.\n\n"
+            + Colour.END)
+        print(
+            "==============================================================\n")
+
+        restart = [
+            inquirer.List(
+                'option',
+                message="Would you like to enter infomation or exit program?",
+                choices=["Enter infomation", "Exit program"],
+            ),
+        ]
+
+        option = inquirer.prompt(restart, render=ListConsoleRender())
+
+        if option['option'] == "Enter infomation":
+            Remove()
+            functions()
+
+        elif option['option'] == "Exit program":
+            print(
+                "==============================================================\n"
+            )
+            delay_print("Thanks for using the waikato air email generator\n")
+            delay_print("\nSee you next time!\n")
+            sys.exit()
 
 
 def Original_Price():
     global original_price
-    original_price = click.prompt(
-        '\nPlease enter the flight fare to {}'.format(
-            destination['destination']),
-        prompt_suffix=": $",
-        type=int)
+    original_price = click.prompt('\nPlease enter a flight fare to {}'.format(
+        destination['destination']),
+                                  prompt_suffix=": $",
+                                  type=int)
 
     if original_price < 0:
         delay_print(Colour.RED +
@@ -146,7 +173,8 @@ def Cabin_Class():
     cabin_classes = [
         inquirer.List(
             'class',
-            message="Please enter the cabin class",
+            message=
+            "Please enter the cabin class, this adds a multiplier to the fare",
             choices=[
                 'Economy Class', 'Premium Economy', 'Business Class',
                 'First Class'
@@ -203,7 +231,7 @@ def Discount_Input():
     global discount
     global discounted_price
 
-    discount = click.prompt("\nPlease enter the discount percentage",
+    discount = click.prompt("\nPlease enter a discount percentage",
                             prompt_suffix=': %',
                             type=int)
 
