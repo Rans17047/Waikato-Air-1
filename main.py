@@ -1,5 +1,5 @@
 import sys  # To exit the program and for it's write and flush functions.
-import time  # For delay
+import time  # For delay 
 import click  # For inputs
 import random  # To pick a random function
 import inquirer  # For inputs
@@ -382,6 +382,7 @@ def Restart():
         Restart()
 
     elif option['option'] == "Enter new infomation":
+        seats -= 1
         Remove_Lines()
         functions()
 
